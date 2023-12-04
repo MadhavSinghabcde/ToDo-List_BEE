@@ -7,8 +7,6 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var mongoose = require("mongoose");
 var users;
-console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
-mongoose.connect("mongodb://localhost:27017/keepdata");
 var userschema = new mongoose.Schema({
   titl: String,
   text: String,
@@ -145,10 +143,16 @@ app.post("/", async (req, res) => {
     });*/
 });
 
-app.listen(8000, (err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("working properly");
-  }
-});
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    app.listen(8000, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("working properly");
+      }
+    });
+  })
+  .catch(error => console.error(error));
+
+
